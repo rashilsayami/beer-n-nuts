@@ -1,5 +1,3 @@
-
-
 export const getBgColor = () => { 
     const bgarr = ["#b73e3e", "#5b45b0", "#7f167f", "#735f32", "#1d2569", "#285430","#f6b100",
         "#025cca",
@@ -15,7 +13,7 @@ export const getAvatarName = (name) => {
     return name.split(" ").map((word) => [word]).join("").toUpperCase();
 }
 
- export const formatDate = (date) => {
+export const formatDate = (date) => {
         const months = [
             'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
             'October', 'November', 'December'

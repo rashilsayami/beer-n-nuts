@@ -289,8 +289,8 @@ const Report = () => {
                     </div>
                 </div>
             </div>
-            <Bottom />
-        </section>
+        <Bottom />
+    </section>
     );
 };
 

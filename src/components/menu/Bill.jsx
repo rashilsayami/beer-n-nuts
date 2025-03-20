@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { resetCart } from '../../redux/slices/cartSlice';
+import { resetCart, selectCartSubtotal, selectCartTax, selectCartTotal } from '../../redux/slices/cartSlice';
 import { placeOrder } from '../../redux/slices/orderSlice';
 import { toast } from 'react-hot-toast';
 
@@ -10,14 +10,9 @@ const Bill = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart);
   const customerData = useSelector((state) => state.customer);
-
-  const calculateSubtotal = () => {
-    return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
-  };
-
-  const calculateTax = (subtotal) => {
-    return subtotal * 0.13; // 13% tax
-  };
+  const subtotal = useSelector(selectCartSubtotal);
+  const tax = useSelector(selectCartTax);
+  const total = useSelector(selectCartTotal);
 
   const handlePaymentSelect = (method) => {
     setSelectedPayment(method);
@@ -31,16 +26,16 @@ const Bill = () => {
 
     try {
       setIsProcessing(true);
-      const subtotal = calculateSubtotal();
-      const tax = calculateTax(subtotal);
 
       const orderData = {
         items: cartItems,
-        total: subtotal,
+        subtotal: subtotal,
         tax: tax,
+        total: total,
         customerName: customerData.customerName,
         tableNo: customerData.tableNo,
         paymentMethod: selectedPayment,
+        orderDate: new Date().toISOString(),
       };
 
       dispatch(placeOrder(orderData));
@@ -55,9 +50,6 @@ const Bill = () => {
     }
   };
 
-  const subtotal = calculateSubtotal();
-  const tax = calculateTax(subtotal);
-
   return (
     <div className='px-2 sm:px-4 py-2 mb-20 lg:mb-0'>
       <div className='flex items-center justify-between px-2 mt-2'>
@@ -67,6 +59,10 @@ const Bill = () => {
       <div className='flex items-center justify-between px-2 mt-2'>
         <p className='text-xs text-[#ababab] font-medium mt-2'>Tax(13%)</p>  
         <h1 className='text-[#f5f5f5] text-xs sm:text-sm font-bold'>Rs. {tax.toLocaleString()}</h1>
+      </div>
+      <div className='flex items-center justify-between px-2 mt-2 bg-[#1f1f1f] py-2 rounded-lg'>
+        <p className='text-xs text-[#f5f5f5] font-medium'>Total Amount</p>  
+        <h1 className='text-[#f5f5f5] text-sm sm:text-base font-bold'>Rs. {total.toLocaleString()}</h1>
       </div>
       <div className='flex items-center gap-2 sm:gap-3 px-2 mt-4'>
         <button 

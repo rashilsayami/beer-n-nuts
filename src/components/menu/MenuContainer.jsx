@@ -203,9 +203,9 @@ const MenuContainer = () => {
             </div>
           );
         })}
-      </div>
     </div>
-  );
+    </div>
+);
 };
 
 export default MenuContainer;
